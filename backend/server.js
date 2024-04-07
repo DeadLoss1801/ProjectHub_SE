@@ -1,14 +1,15 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const router = require("./router");
+
+app.use(express.json());
 app.use(
     cors({
         origin: "*",
     })
 );
+const router = require("./router");
 
-app.use(express.json());
 app.use('/api', router);
 
 app.listen(8000, () => {
