@@ -1,5 +1,36 @@
 const { User } = require('../model');
+const jwtSecret = 'your_jwt_secret_key_here';
+const jwt = require('jsonwebtoken');
+const { use } = require('../router');
 
+const login = async (req, res) => {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email: email });
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (password != user.password) {
+        return res.status(403).json({ message: 'Password incorrect' });
+    }
+
+    const token = jwt.sign(user, jwtSecret, { expiresIn: '1h' });
+    return res.status(200).json({ token });
+}
+
+
+const verifyToken = (req, res, next) => {
+    const token = req.headers['authorization'];
+    if (!token) return res.status(401).json({ message: 'Unauthorized' });
+
+    jwt.verify(token, jwtSecret, (err, decoded) => {
+        if (err) return res.status(401).json({ message: 'Unauthorized' });
+
+        req.user = decoded;
+        next();
+    });
+};
 // create a new user 
 const createUser = async (req, res) => {
     try {
@@ -57,4 +88,4 @@ const getAllUsers = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
-module.exports = { createUser, getUserById, updateUserById, deleteUserById, getAllUsers };
+module.exports = { createUser, getUserById, updateUserById, deleteUserById, getAllUsers, login };
