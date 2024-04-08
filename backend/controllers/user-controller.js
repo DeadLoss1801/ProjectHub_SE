@@ -15,22 +15,41 @@ const login = async (req, res) => {
         return res.status(403).json({ message: 'Password incorrect' });
     }
 
-    const token = jwt.sign(user, jwtSecret, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user._id }, jwtSecret, { expiresIn: '1h' });
     return res.status(200).json({ token });
 }
 
 
-const verifyToken = (req, res, next) => {
-    const token = req.headers['authorization'];
+const verifyToken = async (req, res, next) => {
+    let token = req.headers['authorization'];
+
     if (!token) return res.status(401).json({ message: 'Unauthorized' });
 
-    jwt.verify(token, jwtSecret, (err, decoded) => {
-        if (err) return res.status(401).json({ message: 'Unauthorized' });
+    try {
+        token = token.split(' ')[1];
+        jwt.verify(token, jwtSecret, (err, decoded) => {
+            if (err) return res.status(401).json({ message: 'Unauthorized', "Error": err });
+            req.user = decoded;
 
-        req.user = decoded;
+        });
+        const id = req.user.id;
+        const user = await User.findById(id);
+        req.user = user;
         next();
-    });
+    } catch (err) {
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
 };
+
+
+const restrictTo = (...roles) => {
+    return (req, res, next) => {
+        if (!roles.includes(req.user.role)) {
+            return res.status(500).json({ message: "You does not have permission" })
+        }
+        next();
+    }
+}
 // create a new user 
 const createUser = async (req, res) => {
     try {
@@ -83,9 +102,9 @@ const deleteUserById = async (req, res) => {
 const getAllUsers = async (req, res) => {
     try {
         const users = await User.find();
-        res.json(users);
+        return res.json(users);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
 };
-module.exports = { createUser, getUserById, updateUserById, deleteUserById, getAllUsers, login };
+module.exports = { createUser, getUserById, updateUserById, deleteUserById, getAllUsers, login, verifyToken, restrictTo };

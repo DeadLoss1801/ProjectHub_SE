@@ -1,5 +1,4 @@
-const User = require('../model')
-const Task = require('../model')
+const { User, Task } = require('../model');
 
 const createTask = async (req, res) => {
     try {
@@ -30,7 +29,7 @@ const createTask = async (req, res) => {
 const getAllTasks = async (req, res) => {
     try {
         const tasks = await Task.find();
-        res.json(tasks);
+        return res.json(tasks);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
