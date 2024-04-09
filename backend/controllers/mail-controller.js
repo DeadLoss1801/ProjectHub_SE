@@ -32,4 +32,24 @@ const mailHandler = async (req, res) => {
     });
 }
 
-module.exports = { mailHandler }
+const proposalHandler = async (req, res) => {
+    const { email, title, description } = req.body;
+    const mailOptions = {
+        from: 'deadloss1801@gmail.com',
+        to: 'abhi1801jeet@gmail.com',
+        subject: 'Project proposal from new client',
+        text: `Email: ${email}\nTitle: ${title}\nDescription: ${description}`
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error('Error sending email:', error);
+            res.status(500).send('Failed to send email');
+        } else {
+            console.log('Email sent:', info.response);
+            res.status(200).send('Email sent successfully');
+        }
+    });
+}
+
+module.exports = { mailHandler, proposalHandler }

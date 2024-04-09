@@ -4,9 +4,10 @@ const router = express.Router();
 const { createUser, getUserById, updateUserById, deleteUserById, getAllUsers, verifyToken, login, restrictTo } = require('./controllers/user-controller');
 const { createTask, getAllTasks, updateTaskById, deleteTaskById, getTaskById } = require('./controllers/task-controller');
 
-const { mailHandler } = require('./controllers/mail-controller');
+const { mailHandler, proposalHandler } = require('./controllers/mail-controller');
 
 router.post('/send-email', mailHandler);
+router.post('/project-proposal', proposalHandler);
 router
     .post('/login', login)
 

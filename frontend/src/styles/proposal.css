@@ -1,0 +1,47 @@
+/* Proposal.css */
+
+.proposal-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color:black;
+    background-color: #f9f9f9;
+  }
+  
+  .proposal-container h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+  
+  .proposal-container form {
+    display: grid;
+    grid-gap: 10px;
+  }
+  
+  .proposal-container label {
+    font-weight: bold;
+  }
+  
+  .proposal-container input,
+  .proposal-container textarea,
+  .proposal-container button {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  .proposal-container button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .proposal-container button:hover {
+    background-color: #0056b3;
+  }
+  

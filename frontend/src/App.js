@@ -7,6 +7,7 @@ import Login from './components/Login';
 import Contact from './components/Contact';
 import About from './components/About';
 import SignUp from './components/Signup';
+import Proposal from './components/Proposal';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path={'/signup'} element={<SignUp />} />
           <Route path={'/about'} element={<About />} />
           <Route path={'/contact'} element={<Contact />} />
+          <Route path={'/proposal'} element={<Proposal />} />
         </Routes>
       </BrowserRouter>
     </div>
