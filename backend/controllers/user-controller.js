@@ -22,17 +22,20 @@ const login = async (req, res) => {
 
 const verifyToken = async (req, res, next) => {
     let token = req.headers['authorization'];
+    console.log(token);
 
     if (!token) return res.status(401).json({ message: 'Unauthorized' });
 
     try {
         token = token.split(' ')[1];
         jwt.verify(token, jwtSecret, (err, decoded) => {
+            console.log("L  ");
             if (err) return res.status(401).json({ message: 'Unauthorized', "Error": err });
             req.user = decoded;
 
         });
         const id = req.user.id;
+
         const user = await User.findById(id);
         req.user = user;
         next();
