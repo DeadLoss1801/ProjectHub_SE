@@ -5,7 +5,12 @@ import { Link } from 'react-router-dom';
 
 const Navbar = () => {
 
+
     const [flag, setLog] = useState(localStorage.getItem('LoggedIn'));
+    const Logout = () => {
+        localStorage.setItem('LoggedIn', false);
+        setLog(false);
+    }
 
     return (
         <nav className="navbar">
@@ -19,7 +24,7 @@ const Navbar = () => {
                 {
                     flag ?
                         (
-                            <li>Hello</li>
+                            <li><button onClick={Logout}>Logout</button></li>
                         )
                         :
                         (
